@@ -1,4 +1,4 @@
-Linux 基础教程
+﻿Linux 基础教程
 ============
 
 ## [Linux 服务管理](/linux/server-manage.md)

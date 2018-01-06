@@ -1,4 +1,4 @@
-Linux 基础教程
+:orange_book:  Linux 基础教程持续更新中...
 ============
 
 ## [Linux 服务管理](/linux/server-manage.md)

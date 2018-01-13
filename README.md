@@ -1,5 +1,7 @@
-:orange_book:  Linux 基础教程持续更新中...
-============
+#  [在线文档（Online documentation）](http://github.tinywan.com/linux-tutorial/)
+![Author](https://img.shields.io/badge/Author-Tinywan-green.svg)
+
+##  :orange_book:  Linux 基础教程持续更新中...
 
 ## [Linux 服务管理](/docs/linux/server-manage.md)
 

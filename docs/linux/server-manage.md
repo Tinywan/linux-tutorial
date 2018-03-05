@@ -54,10 +54,10 @@ Linux服务管理
     * CentOs：`chkconfig --list`  
     
     * Ubuntu：`sysv-rc-conf`来管理开机的自启动服务，安装：`sudo apt-get install sysv-rc-conf`   
- 
-    * 查看服务自动启状态，可以看到所有PRM包安装的服务    
- 
-    * 注意：可以使用`service`来启动    
+    
+    * 查看服务自动启状态，可以看到所有PRM包安装的服务
+    
+    * 注意：可以使用`service`来启动 
  
 * 源码包安装服务 
 

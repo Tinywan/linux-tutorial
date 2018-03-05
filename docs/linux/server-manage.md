@@ -51,9 +51,9 @@ Linux服务管理
 
 * PRM默认安装服务    
 
-  * CentOs：`chkconfig --list`  
+    * CentOs：`chkconfig --list`  
     
-  * Ubuntu：`sysv-rc-conf`来管理开机的自启动服务，安装：`sudo apt-get install sysv-rc-conf`   
+    * Ubuntu：`sysv-rc-conf`来管理开机的自启动服务，安装：`sudo apt-get install sysv-rc-conf`   
  
     * 查看服务自动启状态，可以看到所有PRM包安装的服务    
  
@@ -61,15 +61,15 @@ Linux服务管理
  
 * 源码包安装服务 
 
-  * 查看服务安装位置，一般是`/usr/local/`下（手动指定的目录）   
+    * 查看服务安装位置，一般是`/usr/local/`下（手动指定的目录）   
   
-  * 注意：不可以使用`service`来启动
+    * 注意：不可以使用`service`来启动
   
 * 安装后的区别：安装位置不同
 
-  * 源码包在指定的位置，如：`/usr/local/`下  
+    * 源码包在指定的位置，如：`/usr/local/`下  
  
-  * PRM安装在默认位置中
+    * PRM安装在默认位置中
  
 #### 1-5 服务与端口
 * 当前系统下运行了那些服务`ps -aux`

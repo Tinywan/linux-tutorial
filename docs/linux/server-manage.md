@@ -90,6 +90,8 @@ Linux服务管理
 * `Foreign Address`正在连接的端口
 * `State`端口状态，`TCP`端口状态为：`LISTEN`（需要三次握手）,而`UDP`则没有（QQ）
 * `netstat -an`查看正在连接的端口
+
+
 ## 第二章 RPM包服务管理 
 
 #### 2-1 独立的服务管理1
@@ -105,8 +107,19 @@ Linux服务管理
 
 #### 3-1 源码包服务管理
 
+* 启动：/usr/local/apache2/bin/apachectl start
+
+
 ## 第四章 课程总结 
 
 #### 4-1 服务管理总结
 
-
+* chkconfig是管理系统服务(service)的命令行工具。所谓系统服务(service)，就是随系统启动而启动，随系统关闭而关闭的程序。
+* chkconfig --list                       #列出所有的系统服务
+* chkconfig --add httpd                  #增加httpd服务
+* chkconfig --del httpd                  #删除httpd服务
+* chkconfig --level httpd 2345 on        #设置httpd在运行级别为2、3、4、5的情况下都是on（开启）的状态
+* chkconfig --list                       #列出系统所有的服务启动情况
+* chkconfig --list mysqld                #列出mysqld服务设置情况
+* chkconfig --level 35 mysqld on         #设定mysqld在等级3和5为开机运行服务，--level 35表示操作只在等级3和5执行，on表示启动，off表示关闭
+* chkconfig mysqld on                    #设定mysqld在各等级为on，“各等级”包括2、3、4、5等级

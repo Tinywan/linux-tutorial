@@ -1,125 +1,102 @@
-Linux服务管理
+Linux网络管理
 ========================
 
-简介：本课程主要对Linux的服务管理进行介绍，包括系统的运行级别、服务管理的分类、RPM包管理和源码包服务管理。本门课程对于Linux运维人员来说非常重要。
+简介：本课程会为你解决Linux网络配置的问题。首先会介绍网络基础知识，然后进行IP地址的配置，并总结了在配置网络环境中经常遇到的问题，最后介绍了几种常用远程登录工具的使用，如XShell和SecureCRT。 
 
 
-## 第一章 简介与分类 
+## 第一章 网络基础 
 
-#### 1-1 简介与系统运行级别 
-* 系统运行级别
-* 查看运行命令级别
+#### 1-1 七层模型 
+* ISO：国际标准化组织
+* OSI：开放系统互联网模型 [ 物理层，数据链路层，网络层，传输层，会话层，表示层，应用层 ]
+* IOS：苹果操作系统
 
-    ```bash
-    www@TinywanAliYun:~$ runlevel 
-    N 5
-    ```
-    > N 表示上一次系统运行的级别，5 表示当前级别
+* 应用层：用户接口
+* 表示层：数据的表现形式、特定功能的实现，如加密，压缩
+* 会话层：对应用会话的管理、同步
+* 传输层：可靠与不可靠的传输（TCP/UDP），传输前的错误检测、流控（确定传输协议）
+* 网络层：提供逻辑地址、选路
+* 数据链路层：成帧，用Mac地址访问媒介，错误检测与修正
+* 物理层：设备之间的比特流的传输，物理接口，电气特性等
 
-* 修改运行命令级别 `init 运行 级别`
-* 运行命令级别列表
+7 应用层：老板
+6 表示层：相当于公司中演示稿老板、替老板写信的助理
+5 会话层：相当于公司中收寄信、写信封与拆信封的秘书
+4 传输层：相当于公司中跑邮局的送信职员
+3 网络层：相当于邮局中的排序工人
+2 数据链路层：相当于邮局中的装拆箱工人
+1 物理层：相当于邮局中的搬运工人
 
-    运行级别 | 含义
-    ------------ | -------------
-    0 | 关机。不能将系统缺省运行级别设置为0，否则无法启动
-    1 | 单用户模式，可以想象我Windows的安全模式，只允许root用户对系统进行维护或者修复
-    2 | 不完全的命令行模式，但不能使用NFS（相当于Windows下的网上邻居）
-    3 | 完全的命令行模式，就是标准字符界面
-    4 | 系统保留
-    5 | 图形界面的多用户模式
-    6 | 重启。不能将系统缺省运行级别设置为0，否则会一直重启
+#### 1-2 TCP/IP四层模型
+* 应用层（上三层）：（FTP，）
+* 传输层：TCP（安全、慢），UDP（快、会丢失）
+* 国际互联层：IP，IGMP，ICMP
+* 网络接入层（下两层）：
 
-* 修改系统默认运行级别：`vim /etc/inittab `
+#### 1-3 IP
 
-#### 1-2 服务的分类
+#### 1-3 端口
 
-服务优化，把不需要的服务关掉，这就是服务器的优化  
+#### 1-4 域名
+C:\Windows\System32\drivers\etc
 
-* PRM默认安装服务    
-   * 独立的服务    
-   * 基于xinetd服务（正在被淘汰）   
-   
-* 源码包安装服务  
-
-#### 1-3 启动与自启动 
-
-* 启动：当前服务是否已经启动
-
-* 自启动：下次开机或重启启动改服务（运行级别：2/3/4，习惯级别，联合使用）
-
-#### 1-4 查询已安装的服务
-
-* PRM默认安装服务    
-
-    * CentOs：`chkconfig --list`  
-    
-    * Ubuntu：`sysv-rc-conf`来管理开机的自启动服务，安装：`sudo apt-get install sysv-rc-conf`   
-    
-    * 查看服务自动启状态，可以看到所有PRM包安装的服务
-    
-    * 注意：可以使用`service`来启动 
- 
-* 源码包安装服务 
-
-    * 查看服务安装位置，一般是`/usr/local/`下（手动指定的目录）   
-  
-    * 注意：不可以使用`service`来启动
-  
-* 安装后的区别：安装位置不同
-
-    * 源码包在指定的位置，如：`/usr/local/`下  
- 
-    * PRM安装在默认位置中
- 
-#### 1-5 服务与端口
-* 当前系统下运行了那些服务`ps -aux`
-* 端口是什么：把IP比作房子，端口就是进入这个房子的门，真正的房子只有几个门，但是一个IP地址的端口可以有65655个。
-* 图片
-* 端口就是**传输层**往**应用层**传递的接口，TCP 和 UDP 协议的都有各自的65655个端口
-* 系统常规端口查看`cat /etc/services`
-* 查询系统中开启的服务`netstat -tlunp`
-  * `-t`列出`tcp` 数据
-  * `-u`列出`udp` 数据
-  * `-l`列出正在监听的网络服务（不包括已经连接的网络服务）
-  * `-n`用端口号来显示服务，而不是用服务名
-  * `-p`列出服务的进程ID（PID）
-* 惨呼 
-* `Recv-Q`接受队列，如果队列不为`0`，表示该端口比较忙
-* `Send-Q`发送队列
-* `Local Address`本地IP和端口
-* `Foreign Address`正在连接的端口
-* `State`端口状态，`TCP`端口状态为：`LISTEN`（需要三次握手）,而`UDP`则没有（QQ）
-* `netstat -an`查看正在连接的端口
+#### 1-5 网关的作用
+网关：Gateway，网间连接器、协议转换器，在网络层以上实现网络互连，是最复杂的网络互连设备，仅用户两个高层协议不同的网络互连。
 
 
-## 第二章 RPM包服务管理 
+## 第二章 Linux网络配置 
 
-#### 2-1 独立的服务管理1
+#### 2-1 IP地址配置
+* ifconfig命令：
+* 临时设置网络IP：ifconfig eth0 192.168.254.200 netmask 255.255.255.0
+* 配置文件设置IP：vi /etc/sysconfig/network-scripts/ifcfg-ens33
 
-#### 2-2 独立的服务管理2
+# 类型为以太网
+TYPE=Ethernet
+# 是否自动获取IP（none/static/dhcp）
+BOOTPROTO=dhcp
+DEFROUTE=yes
+PEERDNS=yes
+PEERROUTES=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_PEERDNS=yes
+IPV6_PEERROUTES=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=ens33
+# 唯一识别码
+UUID=e5aaeb5f-91d1-4375-834b-45d9576f5526
+# 网卡设备名
+DEVICE=ens33
+# IP地址
+IPADDR=192.169.0.252
+# 子网掩码
+NETMASK=255.255.255.0
+# 网关
+GATEWAY=192.168.0.1
+# DNS
+DNS1=114.114.114.114
+# 不允许非root用户控制此网卡
+USERCTL=no
+# 是否随网络服务启动，ens33生效
+ONBOOT=yes
 
-#### 2-3 独立的服务管理3 
+#### 2-2 主机名配置
+* vi /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=localhost.localdomain
 
-#### 2-4 基于xinetd服务的管理
+#### 2-3 DNS
+* vi /etc/resolv.conf
+nameserver 202.106.0.20
+search localhost
 
 
-## 第三章 源码包服务管理
-
-#### 3-1 源码包服务管理
-
-* 启动：/usr/local/apache2/bin/apachectl start
+## 第三章 Linux网络命令
 
 
-## 第四章 课程总结 
 
-#### 4-1 服务管理总结
-
-* chkconfig是管理系统服务(service)的命令行工具。所谓系统服务(service)，就是随系统启动而启动，随系统关闭而关闭的程序。
-* chkconfig --list                       #列出所有的系统服务
-* chkconfig --add httpd                  #增加httpd服务
-* chkconfig --del httpd                  #删除httpd服务
-* chkconfig --level httpd 2345 on        #设置httpd在运行级别为2、3、4、5的情况下都是on（开启）的状态
-* chkconfig --list                       #列出系统所有的服务启动情况
-* chkconfig --list mysqld                #列出mysqld服务设置情况
-* chkconfig --level 35 mysqld on         #设定mysqld在等级3和5为开机运行服务，--level 35表示操作只在等级3和5执行，on表示启动，off表示关闭
-* chkconfig mysqld on                    #设定mysqld在各等级为on，“各等级”包括2、3、4、5等级
+## 第四章 远程登录工具
